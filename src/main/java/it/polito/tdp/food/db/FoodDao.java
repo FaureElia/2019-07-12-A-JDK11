@@ -14,9 +14,9 @@ import it.polito.tdp.food.model.Portion;
 public class FoodDao {
 	
 	public List<Food> getFoodsByPortions(int portions) {
-		String sql = "SELECT food.food_code, food.display_name, COUNT(DISTINCT portion.portion_id) AS CNT " + 
-				"FROM food, `portion` " + 
-				"WHERE food.food_code=portion.food_code " + 
+		String sql = "SELECT food.food_code, food.display_name, COUNT(DISTINCT porzione.portion_id) AS CNT " + 
+				"FROM food, porzione " + 
+				"WHERE food.food_code=porzione.food_code " + 
 				"GROUP BY food.food_code " + 
 				"HAVING CNT=? " +
 				"ORDER BY food.display_name ASC" ;
