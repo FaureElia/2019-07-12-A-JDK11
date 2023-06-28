@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import it.polito.tdp.food.model.Food;
 import it.polito.tdp.food.model.FoodAndCalories;
 import it.polito.tdp.food.model.Model;
+import it.polito.tdp.food.model.RisultatoSimulazione;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -97,8 +98,26 @@ public class FoodController {
 
     @FXML
     void doSimula(ActionEvent event) {
-    	txtResult.clear();
-    	txtResult.appendText("Simulazione...");
+    	String k=this.txtK.getText();
+    	Food f=this.boxFood.getValue();
+    	if(f==null) {
+    		this.txtResult.setText("inserire un cibo!");
+    	}
+    	try {
+    		int kInt=Integer.parseInt(k);
+    		if(kInt<1 || kInt>10) {
+    			this.txtResult.setText("inserire un numero compreso tra 1 e 10");
+    			return;
+    		}
+    		RisultatoSimulazione ris=this.model.simula(f,kInt);
+    		if(ris!=null) {
+    			this.txtResult.setText("cibi preparati: "+ris.getCibiPreparati()+"\n");
+    			this.txtResult.appendText("minuti impiegati: "+ris.getMinutiImpiegati()+"\n");
+    			
+    		}
+    	}catch(NumberFormatException e) {
+    		
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

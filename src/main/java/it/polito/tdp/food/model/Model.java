@@ -75,4 +75,13 @@ public class Model {
 		return migliori5;
 	}
 
+	public RisultatoSimulazione simula(Food f, int  k) {
+		if(!this.grafo.containsVertex(f)) {
+			return null;
+		}
+		Simulatore sim=new Simulatore(this.grafo,k,f);
+		return sim.simula();
+		
+	}
+
 }
