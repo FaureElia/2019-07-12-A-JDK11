@@ -5,8 +5,11 @@
 package it.polito.tdp.food;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.food.model.Food;
+import it.polito.tdp.food.model.FoodAndCalories;
 import it.polito.tdp.food.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,7 +44,7 @@ public class FoodController {
     private Button btnSimula; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxFood"
-    private ComboBox<?> boxFood; // Value injected by FXMLLoader
+    private ComboBox<Food> boxFood; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -50,12 +53,46 @@ public class FoodController {
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
     	txtResult.appendText("Creazione grafo...");
+    	String porzioni=this.txtPorzioni.getText();
+    	if(porzioni=="") {
+    		this.txtResult.appendText("\n inserire qualcosa");
+    		return;
+    	}
+    	try {
+    		int p=Integer.parseInt(porzioni);
+    		if(p<1) {
+    			this.txtResult.appendText("\n inserire un numero maggiore di 0");
+    			return;
+    		}
+    		List<Food> vertici=this.model.creaGrafo(p);
+    		if(vertici.size()!=0 && vertici!=null) {
+    			this.txtResult.setText("grafo creato !\n");
+    			this.txtResult.appendText("numero di vertici: "+vertici.size()+"\n");
+    			this.txtResult.appendText("numero di archi: "+this.model.getArchi()+"\n");
+    			this.boxFood.getItems().addAll(vertici);
+    		}
+    	}catch(NumberFormatException e) {
+    		this.txtResult.appendText("\n inserire un numero");
+    	}
     }
     
     @FXML
     void doCalorie(ActionEvent event) {
-    	txtResult.clear();
-    	txtResult.appendText("Analisi calorie...");
+    	Food f=this.boxFood.getValue();
+    	if(f==null) {
+    		this.txtResult.setText("inserire un cibo");
+    		return;
+    		
+    	}
+    	List<FoodAndCalories> listaMigliori=this.model.getBestFoods(f);
+    	if (listaMigliori!=null) {
+    		this.txtResult.appendText("trovati migliori: "+listaMigliori.size()+"\n");
+    		
+    		for(FoodAndCalories fo:listaMigliori) {
+    			this.txtResult.appendText(fo+"\n");
+    		}
+    		
+    	}
     }
 
     @FXML
